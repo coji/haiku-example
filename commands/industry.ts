@@ -1,8 +1,6 @@
 import jsdom from 'jsdom'
 import { anthropic } from './services/ahthropic'
-
-const userAgent =
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+import { fetchWebDOM, fetchWebContent } from './helpers/fetch-web-content'
 
 export const industryCommand = async (query: string) => {
   const results = await listupUrlByGoogle(query)
@@ -15,9 +13,7 @@ export const industryCommand = async (query: string) => {
 const listupUrlByGoogle = async (query: string) => {
   // Google検索を行い、検索結果ページのDOMを取得する
   const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`
-  const { window } = new jsdom.JSDOM(
-    await (await fetch(url, { headers: { 'User-Agent': userAgent } })).text(),
-  )
+  const window = await fetchWebDOM(url)
 
   // DOMから検索結果のURLリストを取得する
   const results = Array.from(window.document.querySelectorAll('h3'))
@@ -28,16 +24,6 @@ const listupUrlByGoogle = async (query: string) => {
         text?.startsWith('http') && !text.startsWith('https://www.google.com/'),
     )
   return results as string[]
-}
-
-/**
- * URLからWebページのテキストを取得する。
- */
-const fetchWebContent = async (url: string) => {
-  const { window } = new jsdom.JSDOM(
-    await (await fetch(url, { headers: { 'User-Agent': userAgent } })).text(),
-  )
-  return window.document.body.textContent
 }
 
 /**
