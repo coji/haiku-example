@@ -1,11 +1,20 @@
 import { anthropic } from './services/ahthropic'
 import { fetchWebDOM, fetchWebContent } from './helpers/fetch-web-content'
+import { StructuredOutputParser } from 'langchain/output_parsers'
+import { z, infer } from 'zod'
+
+const schema = z.object({
+  url: z.string().url(),
+  companyName: z.string(),
+  industry: z.string(),
+  summary: z.string(),
+})
 
 export const industryCommand = async (query: string) => {
   const results = await listupUrlByGoogle(query)
   for (const result of results) {
-    await extructAndDetectUrl(result)
-    console.log()
+    const company = await extructAndDetectIndustry(result)
+    console.log(company)
   }
 }
 
@@ -29,35 +38,39 @@ const listupUrlByGoogle = async (query: string) => {
  * URLからWebページの内容を取得し、Anthropicに投げて業種を判別する
  * @param url
  */
-const extructAndDetectUrl = async (url: string) => {
+const extructAndDetectIndustry = async (url: string) => {
   const content = await fetchWebContent(url)
-
-  const stream = await anthropic.messages.create({
-    max_tokens: 1000,
-    messages: [
+  const parser = new StructuredOutputParser(schema)
+  const messages: Parameters<typeof anthropic.messages.create>[0]['messages'] =
+    [
       {
         role: 'user',
-        content: `Webページの内容を解析して、その会社の業種を判別し結果だけを出力してください:
+        content: `Webページの内容を解析して、その会社の業種を判別し結果だけを出力してください。
 
-出力結果: CSVフォーマット。項目は以下の4つ。
-- URL
-- 会社名
-- 業種
-- 会社概要要約
+${parser.getFormatInstructions()}
+
+条件:
+- 出力は簡潔な日本語でお願いします。
 
 対象URL: ${url}
-Webページの内容: ${content}
+Webページの内容: ${content?.slice(0, 100000)}
 `,
       },
-    ],
-    model: 'claude-3-haiku-20240307',
-    stream: true,
-  })
+    ]
 
-  for await (const message of stream) {
-    if (message.type === 'content_block_delta') {
-      process.stdout.write(message.delta.text)
-    }
+  let tried = 0
+  let company: z.infer<typeof schema> | null = null
+  while (tried <= 3 && company === null) {
+    tried++
+    try {
+      const response = await anthropic.messages.create({
+        max_tokens: 1000,
+        model: 'claude-3-haiku-20240307',
+        messages,
+      })
+      company = await parser.parse(response.content[0].text)
+    } catch {}
   }
-  console.log()
+
+  return company
 }

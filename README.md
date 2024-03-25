@@ -7,52 +7,62 @@ claude3 API で Haiku を使って、Google 検索経由でウェブサイトを
 pnpm start industry 企業情報 会社概要
 
 > haiku-example@1.0.0 start /Users/coji/progs/spike/claude/haiku-example
-> tsx haiku.ts "industry" "企業情報" "会社概要"
+> tsx haiku.ts "industry" "人材紹介"
 
-結果: 
-
-URL,会社名,業種,会社概要要約
-https://www.tis.co.jp/company/information/,TIS株式会社,IT・情報通信業,"TIS株式会社は1971年に創業し、システムインテグレーションやクラウドサービスなどのITソリューションを提供する総合ITサービス企業です。2023年3月期の連結売上高は5,084億円、従業員数は21,946名。東京証券取引所プライム市場に上場しています。"
-
-以下のCSVフォーマットで出力します。
-
-URL,会社名,業種,会社概要要約
-https://doda.jp/companyinfo/,株式会社doda,IT・通信業界,転職サイト「doda」を運営する人材サービス会社。求人検索、エージェントサービス、転職情報の提供など、様々な転職支援サービスを提供している。
-
-結果:
-URL,会社名,業種,会社概要要約
-https://employment.en-japan.com/tenshoku-daijiten/13194/,株式会社エン・ジャパン,ヒューマンリソース/人材サービス,転職支援サービスを提供する IT 企業。求人情報サイト「エン転職」などを運営。
-
-以下のCSVフォーマットで結果を出力します。
-
-URL,会社名,業種,会社概要要約
-https://webmo.co.jp/cl2011f/,ウェブモ株式会社,Webサービス,ウェブサイト制作、ECサイト構築、Webシステム開発、SNS運用などのサービスを提供。会社概要では正確な会社情報を分かりやすく掲載している。
-
-以下のCSVフォーマットでお答えします。
-
-URL,会社名,業種,会社概要要約
-https://www.lion.co.jp/ja/company/about/,ライオン株式会社,日用品製造業,"ライオン株式会社は、ハミガキ、ハブラシ、石けん、洗剤、ヘアケア・スキンケア製品、クッキング用品、薬品等の製造販売を行う日用品メーカーです。1891年の創業以来、より良い習慣づくりを提案してきました。連結売上高は4,027億円、従業員数は7,550名(2023年12月31日現在)。"
-
-URL,会社名,業種,会社概要要約
-https://www.kewpie.com/company/about/,キユーピー株式会社,食品製造業,"マヨネーズソース、ソース、瓶缶詰食料品、食品添加物、医薬原料・医薬品・化粧品、飼料・肥料の製造販売、食料品・医薬品製造用機器の製造販売、建築・設計・管理、農畜産業の経営などを行う総合食品企業。"
-
-URL,会社名,業種,会社概要要約
-https://www.irisohyama.co.jp/company/outline/,アイリスオーヤマ株式会社,生活用品の企画、製造、販売,アイリスオーヤマは生活用品の企画、製造、販売を行う企業です。1971年に設立され、現在6,290名の従業員を擁し、2,280億円の売上高を誇っています。主な事業内容は家電製品、照明器具、収納用品、日用品など、生活に密着したさまざまな製品の開発と販売です。
-
-以下のCSVフォーマットで出力します。
-
-URL,会社名,業種,会社概要要約
-https://interrock.co.jp/service/hp-service/useful/1395/,株式会社インターロック,ホームページ制作,全国対応のホームページ作成サービスを提供。「デザイン」「価格」「業種特化」にこだわったオリジナルのホームページを作成。
-
-以下のCSVフォーマットの結果を出力します。
-
-URL,会社名,業種,会社概要要約
-https://www.askul.co.jp/corp/company/overview/,アスクル株式会社,小売業,アスクルは1993年3月にプラス株式会社のオフィス用品通販サービスとしてスタートし、現在は日本最大のオフィス用品通販事業を展開している会社です。オフィス用品の他、ビジネスサポート、ロジスティクス、ITソリューション等、多様な事業を行っています。
-
-以下のCSVフォーマットの結果を出力します。
-
-URL,会社名,業種,会社概要要約
-https://www.kddi.com/corporate/kddi/profile/overview/,KDDI株式会社,電気通信業,KDDIは1984年に設立された日本の電気通信企業です。主要事業は移動通信、固定通信、ケーブルテレビ、インターネットなどの通信サービスの提供です。2023年3月31日現在の連結売上高は5.67兆円、従業員数は49,659名です。
+{
+  url: 'https://www.adecco.co.jp/client/useful/201008_perm',
+  companyName: '株式会社アデコ',
+  industry: '人材サービス業',
+  summary: '株式会社アデコは、人材紹介サービスを提供する企業です。同社は人材派遣、人材紹介、アウトソーシングなどの幅広いサービスを展開しており、企業の人材ニーズに合わせて最適なソリューションを提案しています。'
+}
+{
+  url: 'https://www.staffservice.co.jp/client/client_faq0054.html',
+  companyName: '株式会社スタッフサービス',
+  industry: '人材サービス',
+  summary: '株式会社スタッフサービスは、人材派遣、人材紹介、常用型派遣などの人材サービスを提供している企業です。同社は日本全国に営業拠点を持ち、幅広い職種にわたって人材を紹介しています。'
+}
+{
+  url: 'https://www.saiyo-doda.jp/service/recruitment/column/merit-recruitment',
+  companyName: 'doda',
+  industry: 'Human Resources / Recruiting',
+  summary: "The webpage describes a recruitment service provided by the company 'doda', which specializes in personnel introduction and recruitment support."
+}
+{
+  url: 'https://www.r-agent.com/business/',
+  companyName: 'リクルートエージェント',
+  industry: '人材紹介・採用支援',
+  summary: 'リクルートエージェントは企業や法人向けの中途採用支援サービスを提供しています。求人情報の作成や候補者の紹介、面接選考の支援など、採用活動の全般をサポートしています。採用決定時に成功報酬を得る完全成果報酬型のサービスです。'
+}
+{
+  url: 'https://www.neo-career.co.jp/humanresource/knowhow/a-contents-middlecareer-dainisinsotu-e-jenthikaku-0913/',
+  companyName: '株式会社ネオキャリア',
+  industry: '人材紹介・採用支援サービス',
+  summary: '株式会社ネオキャリアは、採用支援サービスを提供している企業です。中途採用、新卒採用、アルバイト採用など幅広い採用支援サービスを手がけており、企業の採用活動を総合的にサポートしています。人材紹介サービス、求人広告、適性検査、採用代行など、様々な採用支援ツールを提供しています。'
+}
+{
+  url: 'https://mynavi-agent.jp/knowledge/common/755.html',
+  companyName: 'マイナビエージェント',
+  industry: '人材紹介/転職支援サービス',
+  summary: 'マイナビエージェントは、企業と求職者をマッチングさせる人材紹介会社です。企業の採用要件を満たした人材を紹介し、転職活動の全般的なサポートを行っています。求職者には無料でサービスを提供し、企業から成果報酬を得ています。特徴として、非公開求人の紹介、専任のキャリアアドバイザーによるサポート、労働条件や給与の交渉代行などがあげられます。'
+}
+{
+  url: 'http://www.jinzai-bank.net/edit/info.cfm/ug/003/',
+  companyName: '人材バンクネット',
+  industry: '人材紹介業',
+  summary: '人材紹介のサービス内容、種類、メリット、選び方について解説しています。人材紹介会社の特徴や利用者のメリット・デメリットについても紹介しています。'
+}
+{
+  url: 'https://www.tempstaff.co.jp/client/hr-knowledge/1814.html',
+  companyName: 'パーソルテンプスタッフ',
+  industry: '人材サービス業',
+  summary: '人材派遣、アウトソーシング・BPO、紹介予定派遣、人材紹介など、人材サービスを提供する会社です。'
+}
+{
+  url: 'https://www.manpowergroup.jp/client/manpowerclip/employ/permanent.html',
+  companyName: 'マンパワーグループ株式会社',
+  industry: '人材サービス',
+  summary: 'マンパワーグループは人材サービスのグローバルカンパニーで、リクルーティング、評価、研修、人材育成、キャリアマネジメント、アウトソーシング、人材コンサルティングなど、人材に関するあらゆるソリューションを展開しています。人材紹介サービスは成功報酬型で、企業の要望に合わせた人材を探し出して紹介するサービスです。人材派遣と異なり、紹介された候補者を自社の社員として採用することが前提となります。'
+}
 ```
 
 設定
