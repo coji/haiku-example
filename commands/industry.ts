@@ -1,4 +1,3 @@
-import jsdom from 'jsdom'
 import { anthropic } from './services/ahthropic'
 import { fetchWebDOM, fetchWebContent } from './helpers/fetch-web-content'
 
