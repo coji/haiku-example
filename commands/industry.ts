@@ -1,7 +1,7 @@
 import { anthropic } from './services/ahthropic'
 import { fetchWebDOM, fetchWebContent } from './helpers/fetch-web-content'
 import { StructuredOutputParser } from 'langchain/output_parsers'
-import { z, infer } from 'zod'
+import { z } from 'zod'
 
 const schema = z.object({
   url: z.string().url(),
