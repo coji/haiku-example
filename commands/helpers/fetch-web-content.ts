@@ -17,5 +17,5 @@ export const fetchWebDOM = async (url: string) => {
  */
 export const fetchWebContent = async (url: string) => {
   const window = await fetchWebDOM(url)
-  return window.document.body.textContent
+  return window.document.body.textContent ?? ''
 }

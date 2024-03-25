@@ -9,11 +9,16 @@ const schema = z.object({
   industry: z.string(),
   summary: z.string(),
 })
+const parser = new StructuredOutputParser(schema)
+
+type Claude3Messages = Parameters<
+  typeof anthropic.messages.create
+>[0]['messages']
 
 export const industryCommand = async (query: string) => {
   const results = await listupUrlByGoogle(query)
   for (const result of results) {
-    const company = await extructAndDetectIndustry(result)
+    const company = await fetchAndExtractComapny(result)
     console.log(company)
   }
 }
@@ -35,17 +40,15 @@ const listupUrlByGoogle = async (query: string) => {
 }
 
 /**
- * URLからWebページの内容を取得し、Anthropicに投げて業種を判別する
+ * メッセージを作成する
  * @param url
+ * @param content
  */
-const extructAndDetectIndustry = async (url: string) => {
-  const content = await fetchWebContent(url)
-  const parser = new StructuredOutputParser(schema)
-  const messages: Parameters<typeof anthropic.messages.create>[0]['messages'] =
-    [
-      {
-        role: 'user',
-        content: `Webページの内容を解析して、その会社の業種を判別し結果だけを出力してください。
+const createMessages = (url: string, content: string): Claude3Messages => {
+  return [
+    {
+      role: 'user',
+      content: `Webページの内容を解析して、その会社の業種を判別し結果だけを出力してください。
 
 ${parser.getFormatInstructions()}
 
@@ -55,9 +58,15 @@ ${parser.getFormatInstructions()}
 対象URL: ${url}
 Webページの内容: ${content?.slice(0, 100000)}
 `,
-      },
-    ]
+    },
+  ]
+}
 
+/**
+ * Anthropicへのリクエストとレスポンスの解析を行う
+ * @param messages
+ */
+const requestAndParse = async (messages: Claude3Messages) => {
   let tried = 0
   let company: z.infer<typeof schema> | null = null
   while (tried <= 3 && company === null) {
@@ -68,9 +77,20 @@ Webページの内容: ${content?.slice(0, 100000)}
         model: 'claude-3-haiku-20240307',
         messages,
       })
+      const parser = new StructuredOutputParser(schema)
       company = await parser.parse(response.content[0].text)
     } catch {}
   }
+  return company
+}
 
+/**
+ * URLからWebページの内容を取得し、Anthropicに投げて会社の業種を判別する
+ * @param url
+ */
+const fetchAndExtractComapny = async (url: string) => {
+  const content = await fetchWebContent(url)
+  const messages = createMessages(url, content)
+  const company = await requestAndParse(messages)
   return company
 }
