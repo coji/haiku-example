@@ -6,7 +6,7 @@ import { z } from 'zod'
 const schema = z.object({
   url: z.string().url(),
   companyName: z.string(),
-  industry: z.string(),
+  industry: z.enum(['人材', '金融', 'IT', '製造', '不動産', 'その他']),
   summary: z.string(),
 })
 const parser = new StructuredOutputParser(schema)
